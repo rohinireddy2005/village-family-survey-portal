@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Village Survey Portal - Admin Login</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F3F4F6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-box {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            width: 400px;
+            text-align: center;
+        }
+        .login-box h2 {
+            color: #4F46E5;
+            margin-bottom: 30px;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #D1D5DB;
+        }
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4F46E5;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .login-box button:hover {
+            background-color: #4338CA;
+        }
+        .message {
+            margin-top: 15px;
+        }
+        .message p {
+            font-size: 14px;
+        }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+
+<body>
+<div class="login-box">
+    <h2>Admin Login</h2>
+
+    <form th:action="@{/login}" method="post">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+
+    <div class="message">
+        <p th:if="${param.error}" class="error">Invalid username or password</p>
+        <p th:if="${param.logout}" class="success">Logged out successfully</p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Village Survey Dashboard</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+<div class="container mt-4">
+
+    <h2 class="text-center mb-4">Village Survey Dashboard</h2>
+
+    <!-- ===================== DASHBOARD CARDS ===================== -->
+    <div class="row text-center">
+
+        <div class="col-md-3 mb-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h6>Total Families</h6>
+                    <h3 th:text="${stats.totalFamilies}">0</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h6>Total Population</h6>
+                    <h3 th:text="${stats.totalPopulation}">0</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h6>Male</h6>
+                    <h3 th:text="${stats.maleCount}">0</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card bg-warning text-dark">
+                <div class="card-body">
+                    <h6>Female</h6>
+                    <h3 th:text="${stats.femaleCount}">0</h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ===================== CHARTS ===================== -->
+    <div class="row mt-5">
+
+        <div class="col-md-4">
+            <h6 class="text-center">Gender Ratio</h6>
+            <canvas id="genderChart"></canvas>
+        </div>
+
+        <div class="col-md-4">
+            <h6 class="text-center">BPL vs APL</h6>
+            <canvas id="bplChart"></canvas>
+        </div>
+
+        <div class="col-md-4">
+            <h6 class="text-center">Literacy Status</h6>
+            <canvas id="literacyChart"></canvas>
+        </div>
+
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h5 class="text-center">Education Levels</h5>
+            <canvas id="educationChart"></canvas>
+        </div>
+    </div>
+
+    <!-- ===================== ACTION BUTTONS ===================== -->
+    <div class="text-center mt-4">
+        <a href="/family/list" class="btn btn-primary me-2">Family List</a>
+        <a href="/education-summary" class="btn btn-info me-2">Education Summary</a>
+        <a href="/education-details" class="btn btn-success me-2">Education Tracking</a>
+        <a href="/logout" class="btn btn-danger">Logout</a>
+    </div>
+
+</div>
+
+<!-- ===================== CHART SCRIPTS ===================== -->
+<script th:inline="javascript">
+/*<![CDATA[*/
+let male       = [[${stats.maleCount}]];
+let female     = [[${stats.femaleCount}]];
+
+let bpl        = [[${stats.bplCount}]];
+let apl        = [[${stats.aplCount}]];
+
+let literate   = [[${stats.literateCount}]];
+let illiterate = [[${stats.illiterateCount}]];
+
+// ✅ Convert Thymeleaf lists to JS arrays safely
+let eduLabels = /*[[${educationLevels}]]*/ [];
+let eduValues = /*[[${educationCounts}]]*/ [];
+
+// Fallback if lists are null
+if (!eduLabels) eduLabels = [];
+if (!eduValues) eduValues = [];
+
+// Gender Pie Chart
+new Chart(document.getElementById("genderChart"), {
+    type: "pie",
+    data: {
+        labels: ["Male", "Female"],
+        datasets: [{
+            data: [male, female],
+            backgroundColor: ['#36A2EB', '#FF6384'],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } }
+    }
+});
+
+// BPL vs APL Bar Chart
+new Chart(document.getElementById("bplChart"), {
+    type: "bar",
+    data: {
+        labels: ["BPL", "APL"],
+        datasets: [{
+            data: [bpl, apl],
+            backgroundColor: ['#FFCE56', '#4BC0C0'],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: { y: { beginAtZero: true } }
+    }
+});
+
+// Literacy Pie Chart
+new Chart(document.getElementById("literacyChart"), {
+    type: "pie",
+    data: {
+        labels: ["Literate", "Illiterate"],
+        datasets: [{
+            data: [literate, illiterate],
+            backgroundColor: ['#9966FF', '#FF9F40'],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } }
+    }
+});
+
+// Education Level Bar Chart
+new Chart(document.getElementById("educationChart"), {
+    type: "bar",
+    data: {
+        labels: eduLabels,
+        datasets: [{
+            label: "Education Count",
+            data: eduValues,
+            backgroundColor: '#36A2EB',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: { y: { beginAtZero: true } }
+    }
+});
+/*]]>*/
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
