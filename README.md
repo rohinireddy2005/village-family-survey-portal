@@ -32,7 +32,7 @@ VillageSurveyApplication.java
 
 5. Open browser:
 
-http://localhost:8080
+http://localhost:8080/login
 
 ## Admin Login
 
